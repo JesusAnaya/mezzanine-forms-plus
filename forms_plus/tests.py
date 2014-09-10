@@ -3,8 +3,8 @@ from __future__ import unicode_literals
 from django.test import TestCase
 
 from mezzanine.core.models import CONTENT_STATUS_PUBLISHED
-from mezzanine.forms import fields
-from mezzanine.forms.models import Form
+from .models import Form
+import fields
 
 
 class TestsForm(TestCase):

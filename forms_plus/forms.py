@@ -15,10 +15,9 @@ from django.utils.translation import ugettext as _
 from django.utils.timezone import now
 
 from mezzanine.conf import settings
-from mezzanine.forms import fields
-from mezzanine.forms.models import FormEntry, FieldEntry
 from mezzanine.utils.email import split_addresses as split_choices
-
+from .models import FormEntry, FieldEntry
+import fields
 
 fs = FileSystemStorage(location=settings.FORMS_UPLOAD_ROOT)
 
@@ -141,7 +140,7 @@ class FormForForm(forms.ModelForm):
         super(FormForForm, self).__init__(*args, **kwargs)
         # Create the form fields.
         for field in self.form_fields:
-            field_key = "field_%s" % field.id
+            field_key = field.name
             field_class = fields.CLASSES[field.field_type]
             field_widget = fields.WIDGETS.get(field.field_type)
             field_args = {"label": field.label, "required": field.required,
@@ -213,7 +212,7 @@ class FormForForm(forms.ModelForm):
         entry_fields = entry.fields.values_list("field_id", flat=True)
         new_entry_fields = []
         for field in self.form_fields:
-            field_key = "field_%s" % field.id
+            field_key = field.name
             value = self.cleaned_data[field_key]
             if value and self.fields[field_key].widget.needs_multipart_form:
                 value = fs.save(join("forms", str(uuid4()), value.name), value)
@@ -237,7 +236,7 @@ class FormForForm(forms.ModelForm):
         """
         for field in self.form_fields:
             if field.is_a(fields.EMAIL):
-                return self.cleaned_data["field_%s" % field.id]
+                return self.cleaned_data[field.name]
         return None
 
 

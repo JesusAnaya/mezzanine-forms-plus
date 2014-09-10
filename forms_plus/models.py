@@ -7,8 +7,8 @@ from django.utils.translation import ugettext_lazy as _
 from mezzanine.conf import settings
 from mezzanine.core.fields import RichTextField
 from mezzanine.core.models import Orderable, RichText
-from mezzanine.forms import fields
 from mezzanine.pages.models import Page
+import fields
 
 
 class Form(Page, RichText):
@@ -55,6 +55,7 @@ class Field(Orderable):
     """
 
     form = models.ForeignKey("Form", related_name="fields")
+    name = models.CharField(_("Name"), max_length=255)
     label = models.CharField(_("Label"),
         max_length=settings.FORMS_LABEL_MAX_LENGTH)
     field_type = models.IntegerField(_("Type"), choices=fields.NAMES)

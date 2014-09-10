@@ -1,0 +1,27 @@
+{% extends "admin/base_site.html" %}
+
+{% load i18n future staticfiles %}
+
+{% block extrahead %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static "mezzanine/css/admin/form_plus_entries.css" %}">
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <table>
+        <tr>
+            <th>{% trans "Name of form" %}</th>
+            <th class="last">{% trans "View entries" %}</th>
+        </tr>
+        {% for form_page in form_pages %}
+        <tr class="{% cycle on,off as row %}">
+            <td class="field">{{ form_page.title }}</td>
+            <td class="include">
+                <a href="{% url 'form_entries' form_page.pk %}">View entries</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}
